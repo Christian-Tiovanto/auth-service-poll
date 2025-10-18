@@ -1,11 +1,11 @@
 import { JoiSchema, JoiSchemaOptions } from 'joi-class-decorators';
-import { IUser } from '../models/user';
 import * as Joi from 'joi';
 import { ApiProperty } from '@nestjs/swagger';
+import { IUser } from '@app/modules/user/models/user';
 
 @JoiSchemaOptions({ allowUnknown: false })
-export class CreateUserDto
-  implements Omit<IUser, 'id' | 'is_deleted' | 'user_role'>
+export class SignupDto
+  implements Omit<IUser, 'id' | 'is_deleted' | 'is_admin'>
 {
   @ApiProperty({ example: 'test@gmail.com' })
   @JoiSchema(Joi.string().required())
@@ -21,10 +21,4 @@ export class CreateUserDto
   })
   @JoiSchema(Joi.string().min(6).max(24).required())
   password: string;
-
-  @ApiProperty({
-    example: false,
-  })
-  @JoiSchema(Joi.boolean().optional())
-  is_admin: boolean;
 }

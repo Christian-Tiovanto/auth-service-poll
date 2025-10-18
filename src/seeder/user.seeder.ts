@@ -14,7 +14,6 @@ export class UserSeeder {
   async run() {
     const email: string = process.env.USER_EMAIL;
     const pass: string = process.env.USER_PASS;
-    const pin: string = process.env.USER_PIN;
     const existing = await this.userService.getUserByEmail(email);
     if (existing) {
       return;
@@ -27,7 +26,7 @@ export class UserSeeder {
           fullname: 'Admin',
           email: email,
           password: pass,
-          pin: pin,
+          is_admin: true,
         }),
       );
 

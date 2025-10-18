@@ -13,7 +13,6 @@ import {
   QueryFailedError,
   Repository,
 } from 'typeorm';
-import { CreateUserDto } from '../dtos/create-user.dto';
 import { ErrorCode } from '@app/enums/error-code';
 import { RegexPatterns } from '@app/enums/regex-pattern';
 import { UpdatePasswordDto } from '../dtos/update-password.dto';
@@ -22,6 +21,7 @@ import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UserSort } from '../classes/user.query';
 import { SortOrder, SortOrderQueryBuilder } from '@app/enums/sort-order';
 import { GetUserResponse } from '../classes/user.response';
+import { SignupDto } from '@app/modules/auth/dtos/signup.dto';
 
 interface GetAllUserQuery {
   pageNo: number;
@@ -39,10 +39,30 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(signUpDto: SignupDto): Promise<User> {
     let createdUser: User;
     try {
-      const user = this.userRepository.create(createUserDto);
+      const user = this.userRepository.create(signUpDto);
+      createdUser = await this.userRepository.save(user);
+    } catch (err) {
+      const queryError = err as QueryFailedError & {
+        driverError: { errno: ErrorCode; sqlMessage: string };
+      };
+      if (queryError.driverError.errno === ErrorCode.DUPLICATE_ENTRY) {
+        const duplicateValue = new RegExp(RegexPatterns.DuplicateEntry).exec(
+          queryError.driverError.sqlMessage,
+        );
+        throw new ConflictException(`${duplicateValue[1]} value already exist`);
+      }
+    }
+    delete createdUser.password;
+    return createdUser;
+  }
+
+  async createUserAdmin(signUpDto: SignupDto): Promise<User> {
+    let createdUser: User;
+    try {
+      const user = this.userRepository.create({ ...signUpDto, is_admin: true });
       createdUser = await this.userRepository.save(user);
     } catch (err) {
       const queryError = err as QueryFailedError & {
@@ -142,7 +162,6 @@ export class UserService {
   async findUserById(id: number) {
     const user = await this.userRepository.findOne({
       where: { id, is_deleted: false },
-      relations: ['user_role'],
     });
     if (!user) throw new NotFoundException('No user with that id');
     return user;

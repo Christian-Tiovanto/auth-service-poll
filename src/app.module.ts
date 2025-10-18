@@ -7,6 +7,7 @@ import { DataValidationPipe } from './pipes/validation.pipe';
 import { ExceptionHandlerFilter } from './filters/exception-handler.filter';
 import { UserSeeder } from './seeder/user.seeder';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   providers: [
@@ -28,6 +29,7 @@ import { APP_FILTER, APP_PIPE } from '@nestjs/core';
       logger: 'advanced-console',
     }),
     UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

@@ -19,69 +19,43 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthenticateGuard } from '@app/guards/authenticate.guard';
-import { UpdatePasswordDto } from '../dtos/update-password.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { OffsetPagination } from '@app/interfaces/pagination.interface';
 import { OffsetPaginationInterceptor } from '@app/interceptors/offset-pagination.interceptor';
 import { GetAllUserQuery, UserSort } from '../classes/user.query';
 import { GetUserResponse } from '../classes/user.response';
 import { SortOrder } from '@app/enums/sort-order';
-import { IntermediateGuard } from '@app/guards/intermediate.guard';
 import { AuthorizeGuard } from '@app/guards/authorize.guard';
+import { PermissionsMetatada } from '@app/decorators/permission.decorator';
+import { UserPermission } from '@app/enums/permission';
 
 @ApiTags(ApiTag.USER)
 @Controller('api/v1/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Update User Password',
-  })
-  // @PermissionsMetatada(UserPermission.EDIT)
-  @UseGuards(AuthenticateGuard, IntermediateGuard, AuthorizeGuard)
-  @Patch(':id/update-password')
-  async updatePassword(
-    @Param('id', ParseIntPipe) userId: number,
-    @Body() updatePasswordDto: UpdatePasswordDto,
-  ) {
-    return await this.userService.updateUserPassword(userId, updatePasswordDto);
-  }
+  // @ApiBearerAuth()
+  // @ApiOperation({
+  //   summary: 'Update User Password',
+  // })
+  // @UseGuards(AuthenticateGuard, AuthorizeGuard)
+  // @Patch(':id/update-password')
+  // async updatePassword(
+  //   @Param('id', ParseIntPipe) userId: number,
+  //   @Body() updatePasswordDto: UpdatePasswordDto,
+  // ) {
+  //   return await this.userService.updateUserPassword(userId, updatePasswordDto);
+  // }
 
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get User by Id',
   })
-  // @PermissionsMetatada(UserPermission.VIEW)
-  @UseGuards(AuthenticateGuard, IntermediateGuard, AuthorizeGuard)
+  @UseGuards(AuthenticateGuard, AuthorizeGuard)
   @Get(':id')
   async getUserById(@Param('id', ParseIntPipe) userId: number) {
     return await this.userService.getUserById(userId);
   }
-
-  // @ApiBearerAuth()
-  // @ApiOperation({
-  //   summary: 'Get All User',
-  // })
-  // @UseGuards(AuthenticateGuard)
-  // @UseInterceptors(OffsetPaginationInterceptor)
-  // @Get()
-  // async getAllUser(
-  //   @Query()
-  //   { page_no, page_size }: BasePaginationQuery,
-  // ): Promise<OffsetPagination<User>> {
-  //   const pageSize = parseInt(page_size) || 10;
-  //   const pageNo = parseInt(page_no) || 1;
-  //   const users = await this.userService.getAllUser({
-  //     pageNo,
-  //     pageSize,
-  //   });
-  //   return {
-  //     data: users[0],
-  //     totalCount: users[1],
-  //     filteredCount: users[1],
-  //   };
-  // }
 
   @ApiBearerAuth()
   @ApiOperation({
@@ -89,7 +63,7 @@ export class UserController {
   })
   @ApiOkResponse({ type: GetUserResponse })
   @UseInterceptors(OffsetPaginationInterceptor)
-  @UseGuards(AuthenticateGuard, IntermediateGuard, AuthorizeGuard)
+  @UseGuards(AuthenticateGuard, AuthorizeGuard)
   @Get()
   async getAllUser(
     @Query()
@@ -127,8 +101,7 @@ export class UserController {
   @ApiOperation({
     summary: 'Update User by id',
   })
-  // @PermissionsMetatada(UserPermission.EDIT)
-  @UseGuards(AuthenticateGuard, IntermediateGuard, AuthorizeGuard)
+  @UseGuards(AuthenticateGuard)
   @Patch(':id')
   async updateUserById(
     @Param('id', ParseIntPipe) userId: number,
@@ -141,7 +114,8 @@ export class UserController {
   @ApiOperation({
     summary: 'Delete User by id',
   })
-  @UseGuards(AuthenticateGuard, IntermediateGuard)
+  @UseGuards(AuthenticateGuard, AuthorizeGuard)
+  @PermissionsMetatada(UserPermission.DELETE)
   @Delete(':id')
   async deleteUserById(@Param('id', ParseIntPipe) userId: number) {
     return await this.userService.deleteUserById(userId);

@@ -1,7 +1,7 @@
-export enum ArPermission {
-  CREATE = 'ar.create',
-  LIST = 'ar.list',
-  VIEW = 'ar.view',
-  EDIT = 'ar.edit',
-  DELETE = 'ar.delete',
+export enum UserPermission {
+  CREATE = 'user.create',
+  LIST = 'user.list',
+  VIEW = 'user.view',
+  EDIT = 'user.edit',
+  DELETE = 'user.delete',
 }
