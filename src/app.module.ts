@@ -6,7 +6,6 @@ import { UserModule } from './modules/user/user.module';
 import { DataValidationPipe } from './pipes/validation.pipe';
 import { ExceptionHandlerFilter } from './filters/exception-handler.filter';
 import { UserSeeder } from './seeder/user.seeder';
-import { SecurityPinSeeder } from './seeder/security-pin.seeder';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 
 @Module({
@@ -14,7 +13,6 @@ import { APP_FILTER, APP_PIPE } from '@nestjs/core';
     { provide: APP_PIPE, useClass: DataValidationPipe },
     { provide: APP_FILTER, useClass: ExceptionHandlerFilter },
     UserSeeder,
-    SecurityPinSeeder,
   ],
   imports: [
     ConfigModule.forRoot(),

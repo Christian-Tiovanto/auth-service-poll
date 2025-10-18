@@ -2,23 +2,14 @@ import { JoiSchema, JoiSchemaOptions } from 'joi-class-decorators';
 import { IUser } from '../models/user';
 import * as Joi from 'joi';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserRoleEnum } from '@app/enums/user-role';
 
 @JoiSchemaOptions({ allowUnknown: false })
 export class UpdateUserDto
-  implements Omit<IUser, 'id' | 'password' | 'user_role'>
+  implements Omit<IUser, 'id' | 'password' | 'user_role' | 'is_admin'>
 {
   @ApiProperty({ example: 'test@gmail.com' })
   @JoiSchema(Joi.string().optional())
   email: string;
-
-  @ApiProperty({ example: UserRoleEnum.DEFAULT, enum: UserRoleEnum })
-  @JoiSchema(
-    Joi.string()
-      .valid(...Object.values(UserRoleEnum))
-      .optional(),
-  )
-  role: UserRoleEnum;
 
   @ApiProperty({ example: 'John Doe' })
   @JoiSchema(Joi.string().optional())

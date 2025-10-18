@@ -26,10 +26,7 @@ import { OffsetPaginationInterceptor } from '@app/interceptors/offset-pagination
 import { GetAllUserQuery, UserSort } from '../classes/user.query';
 import { GetUserResponse } from '../classes/user.response';
 import { SortOrder } from '@app/enums/sort-order';
-import { SuperAdminGuard } from '@app/guards/superadmin.guard';
 import { IntermediateGuard } from '@app/guards/intermediate.guard';
-import { PermissionsMetatada } from '@app/decorators/permission.decorator';
-import { UserPermission } from '@app/enums/permission';
 import { AuthorizeGuard } from '@app/guards/authorize.guard';
 
 @ApiTags(ApiTag.USER)
@@ -92,7 +89,6 @@ export class UserController {
   })
   @ApiOkResponse({ type: GetUserResponse })
   @UseInterceptors(OffsetPaginationInterceptor)
-  @PermissionsMetatada(UserPermission.LIST)
   @UseGuards(AuthenticateGuard, IntermediateGuard, AuthorizeGuard)
   @Get()
   async getAllUser(
@@ -145,8 +141,7 @@ export class UserController {
   @ApiOperation({
     summary: 'Delete User by id',
   })
-  @PermissionsMetatada(UserPermission.DELETE)
-  @UseGuards(AuthenticateGuard, IntermediateGuard, SuperAdminGuard)
+  @UseGuards(AuthenticateGuard, IntermediateGuard)
   @Delete(':id')
   async deleteUserById(@Param('id', ParseIntPipe) userId: number) {
     return await this.userService.deleteUserById(userId);

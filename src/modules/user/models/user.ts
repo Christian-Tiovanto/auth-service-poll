@@ -3,19 +3,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { UserRole } from './user-role';
 
 export interface IUser {
   id: number;
   email: string;
   fullname: string;
   password: string;
-  user_role: UserRole[];
+  is_admin: boolean;
 }
 
 @Entity('users')
@@ -31,18 +29,15 @@ export class User implements IUser {
 
   @Column({
     type: 'varchar',
-    // select: false
+    select: false,
   })
   password: string;
 
-  // @Column({
-  //   type: 'varchar',
-  //   // select: false
-  // })
-  // pin: string;
-
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  is_admin: boolean;
 
   @CreateDateColumn()
   created_at: Date;
@@ -54,7 +49,4 @@ export class User implements IUser {
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
-
-  @OneToMany(() => UserRole, (UserRole) => UserRole.user)
-  user_role: UserRole[];
 }

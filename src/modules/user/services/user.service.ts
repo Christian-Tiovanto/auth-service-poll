@@ -75,18 +75,6 @@ export class UserService {
     return user;
   }
 
-  // async getAllUser({ pageNo, pageSize }: GetAllUserQuery) {
-  //   const skip = (pageNo - 1) * pageSize;
-  //   const users = await this.userRepository.findAndCount({
-  //     skip,
-  //     take: pageSize,
-  //     where: {
-  //       is_deleted: false,
-  //     },
-  //   });
-  //   return users;
-  // }
-
   async getAllUser({
     pageNo,
     pageSize,
