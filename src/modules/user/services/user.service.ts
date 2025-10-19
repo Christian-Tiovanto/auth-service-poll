@@ -46,13 +46,14 @@ export class UserService {
       createdUser = await this.userRepository.save(user);
     } catch (err) {
       const queryError = err as QueryFailedError & {
-        driverError: { errno: ErrorCode; sqlMessage: string };
+        driverError: { code: ErrorCode; sqlMessage: string };
       };
-      if (queryError.driverError.errno === ErrorCode.DUPLICATE_ENTRY) {
+      console.log(queryError.driverError.code);
+      if (queryError.driverError.code == ErrorCode.DUPLICATE_ENTRY) {
         const duplicateValue = new RegExp(RegexPatterns.DuplicateEntry).exec(
           queryError.driverError.sqlMessage,
         );
-        throw new ConflictException(`${duplicateValue[1]} value already exist`);
+        throw new ConflictException(`email value already exist`);
       }
     }
     delete createdUser.password;

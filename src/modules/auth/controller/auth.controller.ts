@@ -43,6 +43,6 @@ export class AuthController {
   })
   @Post('register/admin')
   async registerAdmin(@Body() signUpDto: SignupDto) {
-    return this.authService.signup(signUpDto);
+    return this.authService.registerAdmin(signUpDto);
   }
 }

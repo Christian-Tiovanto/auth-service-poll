@@ -1,6 +1,7 @@
 import { RequestUser } from '@app/interfaces/request.interface';
 import { UserService } from '@app/modules/user/services/user.service';
 import {
+  BadRequestException,
   CanActivate,
   ExecutionContext,
   Injectable,
@@ -26,6 +27,9 @@ export class AuthorizeGuard implements CanActivate {
       return true;
     }
     const user = await this.userService.findUserById(request.user.id);
+    if (!user) {
+      throw new BadRequestException('User Not Found');
+    }
     if (!user.is_admin) {
       throw new UnauthorizedException(
         `Access Denied - Missing Permissions ${authorizedPermissions[0].split('.')[0]}`,
