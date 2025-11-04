@@ -1,11 +1,11 @@
-FROM node:20.9-alpine AS build-stage
+FROM node:22-alpine AS build-stage
 WORKDIR /app
 COPY ./package.json ./
 RUN npm install && npm cache clean -f
 COPY . .
 RUN npm run build
 
-FROM node:20.9-alpine AS production-stage
+FROM node:22-alpine AS production-stage
 WORKDIR /app
 COPY --from=build-stage /app/dist ./dist
 COPY --from=build-stage /app/src ./src
