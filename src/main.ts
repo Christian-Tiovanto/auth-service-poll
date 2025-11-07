@@ -10,7 +10,11 @@ async function bootstrap() {
   const seeder = app.get(UserSeeder);
   await seeder.run();
 
-  app.enableCors();
+  app.enableCors({
+    origin: true, // Allows all origins. For production, change to your frontend's URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Endpoint Penitipan Barang')
