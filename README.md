@@ -1,5 +1,12 @@
 # Auth Service for Mata Kuliah DevOps
 
+### 👥 Team Members
+* **Jason** - 221111572
+* **Cecilia Ongso** - 221111729
+* **Willy Halim** - 221110079
+* **Devon Marvelous Loen** - 221110226
+* **Christian Tiovanto** - 221111153
+
 Welcome to the Auth Service repository. This project serves as the dedicated backend infrastructure for handling user identity and access management.
 
 ---
@@ -13,6 +20,7 @@ This service operates as a dedicated backend server focused on security and user
 
 ## 🛠️ Tech Stack
 <img width="1364" height="585" alt="image" src="https://github.com/user-attachments/assets/17188e8d-1330-4d84-8f93-67ceafdf4395" />
+<img width="906" height="568" alt="image" src="https://github.com/user-attachments/assets/7ab7b47f-403b-48d8-ac31-6a31b1159d30" />
 
 This project utilizes a modern, robust technology stack designed for scalability and reliability:
 
