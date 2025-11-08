@@ -12,6 +12,7 @@ This service operates as a dedicated backend server focused on security and user
 * **User Login:** Authenticating existing users and issuing access tokens.
 
 ## 🛠️ Tech Stack
+<img width="1364" height="585" alt="image" src="https://github.com/user-attachments/assets/17188e8d-1330-4d84-8f93-67ceafdf4395" />
 
 This project utilizes a modern, robust technology stack designed for scalability and reliability:
 
