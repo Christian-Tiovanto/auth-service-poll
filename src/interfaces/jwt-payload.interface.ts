@@ -1,3 +1,3 @@
 import { User } from '@app/modules/user/models/user';
 
-export type JwtPayload = Pick<User, 'id' | 'fullname'>;
+export type JwtPayload = Pick<User, 'id' | 'fullname' | 'email'>;
